@@ -1,9 +1,10 @@
 package lexer
 
 import (
-	"github.com/lukebrobbs/interpreter/token"
+	"github.com/lukebrobbs/Interpreter/token"
 )
 
+// Lexer reads a string
 type Lexer struct {
 	input        string
 	position     int  // Current position in input (points to current char)
@@ -11,6 +12,7 @@ type Lexer struct {
 	ch           byte // current char under examination
 }
 
+// New creates a new Lexer
 func New(input string) *Lexer {
 	l := &Lexer{input: input}
 	l.readChar()
@@ -27,6 +29,7 @@ func (l *Lexer) readChar() {
 	l.readPosition++
 }
 
+// NextToken returns a token representing the current character
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 
