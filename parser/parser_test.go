@@ -26,7 +26,7 @@ func TestLetStatements(t *testing.T) {
 	}
 
 	if len(program.Statements) != 3 {
-		t.Fatalf("prmgram.Statemetns does not contain 3 statemtns, got=%d", len(program.Statements))
+		t.Fatalf("prmgram.Statements does not contain 3 statemtns, got=%d", len(program.Statements))
 	}
 
 	tests := []struct {
@@ -41,6 +41,36 @@ func TestLetStatements(t *testing.T) {
 		stmt := program.Statements[i]
 		if !testLetStatement(t, stmt, tt.expectedIdentifier) {
 			return
+		}
+	}
+}
+
+func TestReturnStatements(t *testing.T) {
+	input := `
+	return 5;
+	return 10;
+	return 993322;
+	`
+
+	l := lexer.New(input)
+	p := New(l)
+
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if len(program.Statements) != 3 {
+		t.Fatalf("prmgram.Statements does not contain 3 statemtns, got=%d", len(program.Statements))
+	}
+
+	for _, stmt := range program.Statements {
+		returnStmt, ok := stmt.(*ast.ReturnStatement)
+
+		if !ok {
+			t.Errorf("stmt not *ast.ReturnStatement, got=%T", stmt)
+			continue
+		}
+		if returnStmt.TokenLiteral() != "return" {
+			t.Errorf("returnstmt.TokenLiteral() not 'return', got %q", returnStmt.TokenLiteral())
 		}
 	}
 }
